@@ -1,8 +1,4 @@
-# Code execution environment was reset, so we need to regenerate the HTML file again
 
-from pathlib import Path
-
-responsive_html = """
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -121,7 +117,7 @@ responsive_html = """
       <input type="number" id="age" min="1" max="120" placeholder="Вік">
 
       <label for="phone">Номер телефону</label>
-      <input type="tel" id="phone" placeholder="+38 (0__) ___ __ __" pattern="\\+38\\s?\\(?0\\d{2}\\)?\\s?\\d{3}\\s?\\d{2}\\s?\\d{2}">
+      <input type="tel" id="phone" placeholder="+38 (0__) ___ __ __" pattern="\+38\s?\(?0\d{2}\)?\s?\d{3}\s?\d{2}\s?\d{2}">
 
       <label for="telegram">Telegram</label>
       <input type="text" id="telegram" placeholder="@your_nickname">
@@ -131,9 +127,3 @@ responsive_html = """
   </div>
 </body>
 </html>
-"""
-
-responsive_path = Path("/mnt/data/index_work_form.html")
-responsive_path.write_text(responsive_html, encoding="utf-8")
-
-responsive_path.name
