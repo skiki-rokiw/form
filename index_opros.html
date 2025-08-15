@@ -116,7 +116,7 @@
       <input type="number" id="age" required min="16" max="100" title="Вік має бути від 16 до 100" min="1" max="120" placeholder="Вік">
 
       <label for="phone">Номер телефону</label>
-      <input type="tel" id="phone" required pattern="\+38\s?\(?0\d{2}\)?\s?\d{3}\s?\d{2}\s?\d{2}" title="Введіть номер у форматі +38 (0XX) XXX XX XX" placeholder="+38 (0__) ___ __ __" pattern="\+38\s?\(?0\d{2}\)?\s?\d{3}\s?\d{2}\s?\d{2}">
+      <input type="tel" id="phone" required pattern="^\+380\d{9}$" title="Введіть номер у форматі +380XXXXXXXXX" title="Введіть номер у форматі +38 (0XX) XXX XX XX" placeholder="+38 (0__) ___ __ __" pattern="\+38\s?\(?0\d{2}\)?\s?\d{3}\s?\d{2}\s?\d{2}">
 
       <label for="telegram">Telegram</label>
       <input type="text" id="telegram" required pattern="^@?\w{4,}$" title="Telegram нікнейм повинен містити мінімум 4 символи" placeholder="@your_nickname">
@@ -126,3 +126,15 @@
   </div>
 </body>
 </html>
+
+<script>
+function validateForm() {
+  const phone = document.getElementById("phone").value;
+  const phonePattern = /^\+380\d{9}$/;
+  if (!phonePattern.test(phone)) {
+    alert("Будь ласка, введіть правильний номер телефону у форматі +380XXXXXXXXX");
+    return false;
+  }
+  return true;
+}
+</script>
