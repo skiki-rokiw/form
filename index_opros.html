@@ -75,6 +75,9 @@
       box-sizing: border-box;
       font-size: 14px;
     }
+    input:invalid {
+      border-color: #007bff;
+    }
     button {
       margin-top: 25px;
       padding: 12px;
@@ -86,7 +89,11 @@
       cursor: pointer;
       width: 100%;
     }
-    button:hover {
+    button:disabled {
+      background-color: #444;
+      cursor: not-allowed;
+    }
+    button:hover:enabled {
       background-color: #0056b3;
     }
   </style>
@@ -107,34 +114,64 @@
         </ul>
       </div>
 
-      <h1>Вітаємо, розкажіть нам трішки про вас!</h1>
+      <h1>Залиште свої дані — ми все покажемо та розповімо.</h1>
 
-      <label for="name">Як вас звати?</label>
-      <input type="text" id="name" required pattern=".{2,}" title="Введіть ім’я (мінімум 2 символи)" placeholder="Ваше ім’я">
+      <form id="jobForm">
+        <label for="name">Як вас звати?</label>
+        <input type="text" id="name" name="name" required pattern="[А-ЯІЇЄҐа-яіїєґA-Za-z]{2,}" title="Ім’я повинно містити лише літери та не менше 2 символів">
 
-      <label for="age">Скільки вам років?</label>
-      <input type="number" id="age" required min="16" max="100" title="Вік має бути від 16 до 100" min="1" max="120" placeholder="Вік">
+        <label for="age">Скільки вам років?</label>
+        <input type="number" id="age" name="age" required min="16" max="100" title="Вік має бути від 16 до 100">
 
-      <label for="phone">Номер телефону</label>
-      <input type="tel" id="phone" required pattern="^\+380\d{9}$" title="Введіть номер у форматі +380XXXXXXXXX" title="Введіть номер у форматі +38 (0XX) XXX XX XX" placeholder="+38 (0__) ___ __ __" pattern="\+38\s?\(?0\d{2}\)?\s?\d{3}\s?\d{2}\s?\d{2}">
+        <label for="phone">Номер телефону</label>
+        <input type="tel" id="phone" name="phone" required pattern="^\+380\d{9}$" placeholder="+380XXXXXXXXX" title="Введіть номер у форматі +380XXXXXXXXX">
 
-      <label for="telegram">Telegram</label>
-      <input type="text" id="telegram" required pattern="^@?\w{4,}$" title="Telegram нікнейм повинен містити мінімум 4 символи" placeholder="@your_nickname">
+        <label for="telegram">Telegram</label>
+        <input type="text" id="telegram" name="telegram" required pattern="^@\w{4,}$" placeholder="@your_nickname" title="Telegram нікнейм повинен починатись з @ та містити не менше 4 символів">
 
-      <button onclick="alert('Дякуємо! Ми звʼяжемось із вами.')">Надіслати</button>
+        <button type="submit" id="submitBtn" disabled>Надіслати</button>
+      </form>
     </div>
   </div>
-</body>
-</html>
 
 <script>
-function validateForm() {
-  const phone = document.getElementById("phone").value;
-  const phonePattern = /^\+380\d{9}$/;
-  if (!phonePattern.test(phone)) {
-    alert("Будь ласка, введіть правильний номер телефону у форматі +380XXXXXXXXX");
-    return false;
-  }
-  return true;
-}
+  const form = document.getElementById('jobForm');
+  const button = document.getElementById('submitBtn');
+  const inputs = form.querySelectorAll('input');
+
+  const validateForm = () => {
+    let valid = true;
+    inputs.forEach(input => {
+      if (!input.checkValidity()) {
+        valid = false;
+      }
+    });
+    button.disabled = !valid;
+  };
+
+  inputs.forEach(input => {
+    input.addEventListener('input', validateForm);
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzKt_TWQMOeEzLDWwY8xQQIVyzjMUSfvPRyPJ5R1nWRgipBgyXGRsTVTSmjZOp1KzBHMA/exec';
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch(scriptURL, { method: 'POST', body: formData });
+      if (response.ok) {
+        alert("Дякуємо! Ми звʼяжемось із вами.");
+        form.reset();
+        button.disabled = true;
+      } else {
+        alert("Помилка при надсиланні. Спробуйте ще раз.");
+      }
+    } catch (error) {
+      alert("Помилка з'єднання. Перевірте інтернет або спробуйте пізніше.");
+    }
+  });
 </script>
+</body>
+</html>
